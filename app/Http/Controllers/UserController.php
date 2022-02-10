@@ -55,7 +55,7 @@ class UserController extends Controller
             ]);
 
             $loginattempt = LoginAttempt::firstOrCreate([
-                'ip'=>$_SERVER['REMOTE_ADDR'],
+                'ip'=> isset($_SERVER['REMOTE_ADDR'])? $_SERVER['REMOTE_ADDR']:'127.0.0.1',
                 'email' => $request->email,
             ]);
 

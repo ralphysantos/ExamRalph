@@ -50,6 +50,7 @@ class OrderController extends Controller
                 return response()->json(['message' => 'No order avaiable'],400);
             }
         } catch (\Throwable $ex) {
+            dd($ex);
             return response()->json(['message' => 'Error'],400);
         }
     }
