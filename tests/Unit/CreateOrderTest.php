@@ -53,7 +53,7 @@ class CreateOrderTest extends TestCase
             "order" => [
                 [
                     "product_id" => "2",
-                    "quantity" => "5"
+                    "quantity" => "999"
                 ]
             ]
         ];
