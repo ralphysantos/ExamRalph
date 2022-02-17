@@ -21,16 +21,15 @@ class login extends ThrottleRequests
         $attempts = parent::resolveMaxAttempts($request, $maxAttempts);
         $limiter = $this->limiter->hit($key, $decayMinutes * 60);
         $remaining = parent::calculateRemainingAttempts($key, $attempts);
-        if($remaining > 0 ){
+        if($remaining > 0){
             return response()->json(['message' => 'Bad Credentials.'.$remaining.' Attempts Remaining'],401);
         }
-        $secs = parent::getTimeUntilNextRetry($key);
         if($this->limiter->tooManyAttempts($key,$attempts)){
             $secs = parent::getTimeUntilNextRetry($key);
             return response()->json(['message' => 'Bad Credentials. User locked. Time Remaining '.gmdate("H:i:s", $secs)],401); 
         }
 
-        $response = $next($request);
+        $next($request);
     }
 }
 

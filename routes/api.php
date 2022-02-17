@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('register','UserController@register');
-Route::post('login','UserController@login')->middleware('loginattempt:5,3');
+Route::post('login','UserController@login')->middleware("throttle:5,3");
 Route::group(['middleware' => 'auth:api'], function() {
     Route::post('order','OrderController@store');
 });

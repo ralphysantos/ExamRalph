@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Cache\RateLimiter;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,6 +52,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+
+        
+        if ($exception instanceof ThrottleRequestsException) {
+            if ($user = $request->user()) {
+                $key = sha1($user->getAuthIdentifier());
+            }
+    
+            if ($route = $request->route()) {
+                $key = sha1($route->getDomain().'|'.$request->ip());
+            }
+            $limiter = app(RateLimiter::class);
+            $secs = $limiter->availableIn($key);
+            return response()->json(['message' => 'Bad Credentials. User locked. Time Remaining '.gmdate("H:i:s", $secs)],401); 
+        }
+
         return parent::render($request, $exception);
     }
 }
