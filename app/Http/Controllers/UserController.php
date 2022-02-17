@@ -9,11 +9,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Hash;
 use Carbon\Carbon;
+use AuthenticatesUsers;
+
 class UserController extends Controller
 {
 
+    
+    public function __construct(){
+            
+   
+    }
+    // protected function hasTooManyLoginAttempts(Request $request)
+    // {
+    //     return $this->limiter()->tooManyAttempts(
+    //         $this->throttleKey($request), 5, 3
+    //     );
+    // }
     public function register(Request $request){
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
@@ -77,16 +89,17 @@ class UserController extends Controller
             //     }
             // }
 
-            if($validator->fails()){
+            // if($validator->fails()){
                 // $loginattempt->attempt = $loginattempt->attempt + 1;
                 // $loginattempt->save();
 
                 // $remain = 5 - $loginattempt->attempt;
                 // return response()->json(['message' => 'Bad Credentials.'.$remain.' Attempts Remaining'],401);
-                return response()->json(['message' => 'Bad Credentials.'],401);
-            }else{
-                $loginattempt->delete();
-            }
+                // return response()->json(['message' => 'Bad Credentials.'],401);
+            // }
+            // else{
+            //     $loginattempt->delete();
+            // }
             if(User::where('email',$request->email)->exists()){
                 $user = User::where('email', $request->email)->first();
                 if(Hash::check($request->password, $user->password)){
